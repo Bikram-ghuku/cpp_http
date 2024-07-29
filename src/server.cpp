@@ -61,13 +61,15 @@ int serve(int client, std::string dirL){
 
 		i = client_message.find("\r\n\r\n");
 		std::string con = "";
-		for(int j = 4; client_message[i + j] != '\r'; j++){
+
+		for(int j = 4; client_message[i + j] != '\0' || i + j < client_message.size(); j++){
 			con += client_message[i + j];
 		}
+
 		if (!ofs) {
 			return 1;
 		}
-
+		
 		ofs << con;
 		ofs.close();
 
