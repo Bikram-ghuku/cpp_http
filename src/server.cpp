@@ -60,16 +60,15 @@ int serve(int client, std::string dirL){
 		std::ofstream ofs(filename);
 
 		i = client_message.find("\r\n\r\n");
-		std::string con;
+		std::string con = "";
 		for(int j = 4; i + j < client_message.size(); j++){
 			con += client_message[i + j];
 		}
 		if (!ofs) {
 			return 1;
 		}
-		std::cout<<con<<std::endl;
-		ofs << con;
 
+		ofs << con;
 		ofs.close();
 
 		message = "HTTP/1.1 201 Created\r\n\r\n";
