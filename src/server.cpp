@@ -10,6 +10,9 @@
 #include <thread>
 #include <sstream>
 #include <fstream>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 int serve(int client, std::string dirL){
 
@@ -45,7 +48,29 @@ int serve(int client, std::string dirL){
 			message = "HTTP/1.1 404 Not Found\r\n\r\n";
 		}
 
+	}else if(client_message.starts_with("POST /files/")){
 
+		int i = client_message.find("/files/");
+		std::string x;
+		for(int j = 7; client_message[i + j] != ' '; j++){
+			x += client_message[i + j];
+		}
+
+		std::string filename = dirL + x;
+		std::ofstream ofs(filename);
+
+		i = client_message.find("\r\n\r\n");
+		std::string con;
+		for(int j = 4; client_message[i + j] != '\r'; j++){
+			con += client_message[i + j];
+		}
+
+		ofs << con;
+
+		ofs.close();
+
+		message = "HTTP/1.1 201 Created\r\n\r\n";
+		
 	}else if(client_message.starts_with("GET /user-agent")){
 
 		int i = client_message.find("User-Agent: ");
