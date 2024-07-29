@@ -52,7 +52,13 @@ int main(int argc, char **argv) {
   
   int client = accept(server_fd, (struct sockaddr *) &client_addr, (socklen_t *) &client_addr_len);
 
-  std::string message = "HTTP/1.1 200 OK\r\n\r\n";
+  std::string client_message(1024, '\0');
+
+  ssize_t brecvd = recv(client, (void *)&client_message[0], client_message.max_size(), 0);
+
+
+
+  std::string message = client_message.contains("GET / HTTP/1.1\r\n") ? "HTTP/1.1 200 OK\r\n\r\n" : "HTTP/1.1 404 Not Found\r\n\r\n";
   send(client, message.c_str(), message.length(), 0);
   std::cout << "Client connected\n";
   
