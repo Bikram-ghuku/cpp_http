@@ -58,15 +58,29 @@
 	if(client_message.starts_with("GET /echo/")){
 		int i;
 		std::string x;
+		
 		for(i = 0; client_message[i+10] != ' '; i++){
 			x += client_message[i+10];
 		}
+
 		message = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: "+std::to_string(x.length())+"\r\n\r\n"+x;
+
 	}else if(client_message.starts_with("GET /user-agent")){
-		
+
+		int i = client_message.find("User-Agent: ");
+		std::string x;
+		for(int j = 12; client_message[i + j] != '\r'; j++){
+			x += client_message[i + j];
+		}
+
+		message = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: "+std::to_string(x.length())+"\r\n\r\n"+x;
+
 	}else if(client_message.starts_with("GET / HTTP/1.1\r\n")){
+
 		message =  "HTTP/1.1 200 OK\r\n\r\n";
+
 	}else{
+
 		message = "HTTP/1.1 404 Not Found\r\n\r\n";
 	}
 
@@ -76,4 +90,4 @@
 	close(server_fd);
 
 	return 0;
-	}
+}
