@@ -60,8 +60,11 @@ int serve(int client, std::string dirL){
 		std::ofstream ofs(filename);
 
 		i = client_message.find("\r\n\r\n");
-		std::string con = client_message.substr(i + 4);
-		
+		std::string con;
+		for(i += 4; client_message[i] != '\0'; i++){
+			con += client_message[i];
+		}
+
 		if (!ofs) {
 			return 1;
 		}
