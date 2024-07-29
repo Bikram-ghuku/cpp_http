@@ -1,14 +1,15 @@
-	#include <iostream>
-	#include <cstdlib>
-	#include <string>
-	#include <cstring>
-	#include <unistd.h>
-	#include <sys/types.h>
-	#include <sys/socket.h>
-	#include <arpa/inet.h>
-	#include <netdb.h>
+#include <iostream>
+#include <cstdlib>
+#include <string>
+#include <cstring>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <thread>
 
-	int main(int argc, char **argv) {
+int main(int argc, char **argv) {
 
 	std::cout << std::unitbuf;
 	std::cerr << std::unitbuf;
@@ -18,7 +19,7 @@
 	int server_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (server_fd < 0) {
 	std::cerr << "Failed to create server socket\n";
-	return 1;
+		return 1;
 	}
 
 	int reuse = 1;
@@ -58,7 +59,7 @@
 	if(client_message.starts_with("GET /echo/")){
 		int i;
 		std::string x;
-		
+
 		for(i = 0; client_message[i+10] != ' '; i++){
 			x += client_message[i+10];
 		}
