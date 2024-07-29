@@ -56,10 +56,20 @@ int main(int argc, char **argv) {
 
   ssize_t brecvd = recv(client, (void *)&client_message[0], client_message.max_size(), 0);
 
+  if(client_message.starts_with("GET /echo/")){
+    int i;
+    std::string x;
+    for(i = 0; client_message[i+10] != ' '; i++){
+      x += client_message[i+10];
+    }
+    std::string message = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 3\r\n\r\n"+x;
+    send(client, message.c_str(), message.length(), 0);
 
+  }else{
+    std::string message = client_message.starts_with("GET / HTTP/1.1\r\n") ? "HTTP/1.1 200 OK\r\n\r\n" : "HTTP/1.1 404 Not Found\r\n\r\n";
 
-  std::string message = client_message.contains("GET / HTTP/1.1\r\n") ? "HTTP/1.1 200 OK\r\n\r\n" : "HTTP/1.1 404 Not Found\r\n\r\n";
-  send(client, message.c_str(), message.length(), 0);
+    send(client, message.c_str(), message.length(), 0);
+  }
   std::cout << "Client connected\n";
   
   close(server_fd);
