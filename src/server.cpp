@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
     for(i = 0; client_message[i+10] != ' '; i++){
       x += client_message[i+10];
     }
-    std::string message = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 3\r\n\r\n"+x;
+    std::string message = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: "+std::to_string(x.length())+"\r\n\r\n"+x;
     send(client, message.c_str(), message.length(), 0);
 
   }else{
